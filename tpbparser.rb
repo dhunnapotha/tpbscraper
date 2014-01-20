@@ -5,6 +5,7 @@ require 'json'
 require File.dirname(__FILE__) + '/helpers.rb'
 require File.dirname(__FILE__) + '/gmail_send.rb'
 
+# TODO: A space in the search string leads to problems! Need to fix it
 def sanity_check(config_file)
   if !ENV['GC_GMAIL_USERNAME'] || !ENV['GC_GMAIL_PASSWORD'] || !ENV['GC_GMAIL_DOMAIN']
     error_log "GMAIL details not set! Aborting!!"
@@ -89,7 +90,7 @@ while true
   # Close the file
   f.close
   # Send the new list of files
-  send_mail_from_gmail_smtp(ENV['GC_GMAIL_USERNAME'],ENV['GC_GMAIL_USERNAME'],"New torrent added",mail_content) unless mail_content.empty?
+  send_mail_from_gmail_smtp(ENV['GC_GMAIL_USERNAME'],ENV['GC_GMAIL_USERNAME'],"New torrents added",mail_content) unless mail_content.empty?
 
   info_log "Going to sleep! Will awake after 30 mins"
   sleep(1800)
