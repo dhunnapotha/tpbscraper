@@ -5,6 +5,8 @@ options = { :address              => "smtp.gmail.com",
             :port                 => 587,
             :domain               => ENV['GC_GMAIL_DOMAIN'],
             :user_name            => ENV['GC_GMAIL_USERNAME'],
+
+
             :password             => ENV['GC_GMAIL_PASSWORD'],
             :authentication       => 'plain',
             :enable_starttls_auto => true  }
@@ -21,7 +23,6 @@ def send_mail_from_gmail_smtp(from,to,subject,body)
     from from
     subject subject
     body body
+    charset = "UTF-8"
   end
 end
-
-
