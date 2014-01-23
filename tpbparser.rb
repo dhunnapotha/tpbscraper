@@ -7,7 +7,9 @@ require File.dirname(__FILE__) + '/gmail_send.rb'
 
 # TODO: A space in the search string leads to problems! Need to fix it
 def sanity_check(config_file)
+  # TODO: Remove the GC prefixes!
   if !ENV['GC_GMAIL_USERNAME'] || !ENV['GC_GMAIL_PASSWORD'] || !ENV['GC_GMAIL_DOMAIN']
+    # TODO: Show proper help here
     error_log "GMAIL details not set! Aborting!!"
     abort
   end
@@ -57,9 +59,12 @@ if !File.exists? torrent_names_file
 end
 
 mail_content = ""
-f = File.open(torrent_names_file,"a+")
-f_content = f.read
+
 while true
+
+  f = File.open(torrent_names_file,"a+")
+  f_content = f.read
+
   categories.each do |name,url|
     doc = Nokogiri::HTML(open(url))
     # sanity check
