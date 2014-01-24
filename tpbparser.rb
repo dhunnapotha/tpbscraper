@@ -73,6 +73,10 @@ def curr_ts
   Time.now.strftime('%Y_%m_%d-%H_%M_%S')
 end
 
+def new_torrents_added?(file_content_to_write)
+  !file_content_to_write.empty?
+end
+
 # Get a Nokogiri::HTML::Document for the page we’re interested in...
 torrent_names_file = File.dirname(__FILE__) + "/torrent_names.txt"
 config_file = File.dirname(__FILE__) + "/tpb_config.json"
@@ -101,11 +105,16 @@ while true
     end
     mail_content_to_send << category_wrapper
   end
-  
+
+  new_updates = new_torrents_added?(file_content_to_write)
   # Send the new list of files
-  send_mail_from_gmail_smtp(ENV['GC_GMAIL_USERNAME'],ENV['GC_GMAIL_USERNAME'],"TPB Torrents Crawler #{curr_ts}",mail_content_to_send)
-  # Save the files
-  write_file_content(torrent_names_file,file_content_to_write)
-  info_log "Going to sleep! Will awake after #{sleep_time/60.0} mins"
+  if new_updates
+    send_mail_from_gmail_smtp(ENV['GC_GMAIL_USERNAME'],ENV['GC_GMAIL_USERNAME'],"TPB Torrents Crawler #{curr_ts}",mail_content_to_send)
+    # Save the files
+    write_file_content(torrent_names_file,file_content_to_write)
+  else
+    info_log "No new updates!"
+  end
+  info_log "Taking a power nap for #{sleep_time/60.0} mins :-)"
   sleep(sleep_time)
 end
